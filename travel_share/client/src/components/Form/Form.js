@@ -29,7 +29,7 @@ const Form = ({ currentId, setCurrentId }) => {
     if (currentId) {
       dispatch(updatePost(currentId, postData));
     } else {
-      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+      dispatch(createPost({ ...postData, name: user?.name }, history));
     }
     clear();
   };
@@ -42,11 +42,11 @@ const Form = ({ currentId, setCurrentId }) => {
       selectedFile: "",
     });
   };
-  if (!user?.result?.name) {
+  if (!user?.name) {
     return (
       <Paper className={classes.paper}>
         <Typography variant="h6" align="center">
-          Please Sign In to create your own memories and like other's memories.
+          Please Sign In to create your own post and like other's posts.
         </Typography>
       </Paper>
     );
@@ -60,7 +60,7 @@ const Form = ({ currentId, setCurrentId }) => {
         onSubmit={handleSubmit}
       >
         <Typography variant="h6">
-          {currentId ? "Editting" : "Creating"} a Memory
+          {currentId ? "Editting" : "Creating"} a Post
         </Typography>
 
         <TextField

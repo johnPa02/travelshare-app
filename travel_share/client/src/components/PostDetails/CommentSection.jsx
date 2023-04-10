@@ -11,7 +11,11 @@ const CommentSection = ({ post }) => {
   const user = JSON.parse(localStorage.getItem("profile"));
   const dispatch = useDispatch();
   const handleClick = async () => {
-    const finalComment = `${user.result.name}: ${comment}`;
+    let userName = user?.result?.name;
+    if (typeof userName === "undefined") {
+      userName = user.name;
+    }
+    const finalComment = `${userName}: ${comment}`;
     const newComments = await dispatch(commentPost(finalComment, post._id));
     setComments(newComments);
     setComment("");
@@ -31,14 +35,13 @@ const CommentSection = ({ post }) => {
           ))}
           <div ref={commentRef} />
         </div>
-        {user?.result?.name && (
+        {user?.result?.name || user?.name ? (
           <div style={{ width: "70%" }}>
             <Typography gutterBottom variant="h6">
               Write a Comment
             </Typography>
             <TextField
               fullWidth
-              rows={4}
               variant="outlined"
               label="Comment"
               multiline
@@ -55,6 +58,8 @@ const CommentSection = ({ post }) => {
               Comment
             </Button>
           </div>
+        ) : (
+          <></>
         )}
       </div>
     </div>

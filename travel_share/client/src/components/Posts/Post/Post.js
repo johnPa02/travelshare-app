@@ -28,7 +28,7 @@ const Post = ({ post, setCurrentId }) => {
   const Likes = () => {
     if (post.likes.length > 0) {
       return post.likes.find(
-        (like) => like === (user?.result?.googleId || user?.result?._id)
+        (like) => like === (user?.sub || user?.result?._id)
       ) ? (
         <>
           <ThumbUpAltIcon fontSize="small" />
@@ -61,7 +61,7 @@ const Post = ({ post, setCurrentId }) => {
           title={post.title}
         />
         <div className={classes.overlay}>
-          <Typography variant="h6">{post.creator}</Typography>
+          <Typography variant="h6">{post.name}</Typography>
           <Typography variant="body2">
             {moment(post.createdAt).fromNow()}
           </Typography>
@@ -96,28 +96,28 @@ const Post = ({ post, setCurrentId }) => {
             {post.message}
           </Typography>
         </CardContent>
-        <CardActions className={classes.cardActions}>
+      </ButtonBase>
+      <CardActions className={classes.cardActions}>
+        <Button
+          size="small"
+          color="primary"
+          disabled={!user?.sub && !user?.result._id}
+          onClick={() => dispatch(likePost(post._id))}
+        >
+          <Likes />
+        </Button>
+        {(user?.sub === post?.creator ||
+          user?.result?._id === post?.creator) && (
           <Button
             size="small"
             color="primary"
-            disabled={!user?.result}
-            onClick={() => dispatch(likePost(post._id))}
+            onClick={() => dispatch(deletePost(post._id))}
           >
-            <Likes />
+            <DeleteIcon fontSize="small" />
+            Delete
           </Button>
-          {(user?.result?.googleId === post?.creator ||
-            user?.result?._id === post?.creator) && (
-            <Button
-              size="small"
-              color="primary"
-              onClick={() => dispatch(deletePost(post._id))}
-            >
-              <DeleteIcon fontSize="small" />
-              Delete
-            </Button>
-          )}
-        </CardActions>
-      </ButtonBase>
+        )}
+      </CardActions>
     </Card>
   );
 };

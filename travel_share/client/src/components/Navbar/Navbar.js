@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useStyles from "./styles";
 import decode from "jwt-decode";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import memories from "../../images/memories.png";
+
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 
@@ -19,7 +19,7 @@ const Navbar = () => {
     setUser(null);
   };
   useEffect(() => {
-    const token = user?.token;
+    const token = user?.jti;
     if (token) {
       const decodedToken = decode(token);
 
@@ -39,25 +39,19 @@ const Navbar = () => {
           variant="h2"
           align="center"
         >
-          Memories
+          TravelShare
         </Typography>
-        <img
-          className={classes.image}
-          src={memories}
-          alt="memories"
-          height={60}
-        />
       </div>
       <Toolbar className={classes.toolbar}>
         {user ? (
           <div className={classes.profile}>
             <Avatar
               className={classes.purple}
-              alt={user.result.name}
-              src={user.result.imageUrl}
+              alt={user?.name || user?.result?.name}
+              src={user?.picture || user?.result?.imageUrl}
             />
             <Typography className={classes.userName} variant="h6">
-              {user.result.name}
+              {user?.name || user?.result?.name}
             </Typography>
             <Button
               variant="contained"
